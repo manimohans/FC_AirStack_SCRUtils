@@ -1,6 +1,7 @@
 import asyncio
 from airstack.execute_query import AirstackClient
 import os, json
+import requests, uuid
 
 async def get_all_pages(api_client, query, variables, typ):
     execute_query_client = api_client.create_execute_query_object(query=query, variables=variables)
@@ -153,11 +154,32 @@ def get_Fname_from_fid(fid):
     fname = ""
     return fname
 
+
+def send_direct_cast(recipient_fid, message):
+    url = "https://api.warpcast.com/v2/ext-send-direct-cast"
+    api_key = os.getenv("WARPCAST_API_KEY2")
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    gen_uuid = uuid.uuid4()
+    data = {
+        "recipientFid": recipient_fid,
+        "message": message,
+        "idempotencyKey": str(gen_uuid)
+    }
+
+    response = requests.put(url, headers=headers, json=data)
+
+    return response.status_code, response.text
+
 async def main():
     api_client = AirstackClient(api_key=os.getenv("AIRSTACK_API_KEY"))
 
     fid = '6846'
-    lim = 10
+    lim = 1
     #await getFollowingFIDWithSCR(api_client, fid)
     #await getFollowersFIDWithSCR(api_client, fid)
     #await getFollowersAsList(api_client, fid)
@@ -171,12 +193,15 @@ async def main():
     following_fids = await getFollowingAsList(api_client, fid)
 
     cnt = 0
+    dc_str = []
     for item in followers_with_scr.keys():
         if item not in following_fids:
+            dc_str.append('https://warpcast.com/'+followers_with_scr[item][1])
             print('SCR: %s, fid: %s , URL: %s'%(followers_with_scr[item][0], item, 'https://warpcast.com/'+followers_with_scr[item][1]))
             cnt+=1
             if cnt == lim:
                 break
+    send_direct_cast(fid, '\n'.join(dc_str))
     return True
 
 if __name__ == "__main__":
