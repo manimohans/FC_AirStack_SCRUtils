@@ -196,11 +196,19 @@ async def main():
     dc_str = []
     for item in followers_with_scr.keys():
         if item not in following_fids:
-            dc_str.append('https://warpcast.com/'+followers_with_scr[item][1])
-            print('SCR: %s, fid: %s , URL: %s'%(followers_with_scr[item][0], item, 'https://warpcast.com/'+followers_with_scr[item][1]))
-            cnt+=1
-            if cnt == lim:
-                break
+            f = open("fid-notif.dat", "r")
+            lines = f.readlines()
+            lines = [x.strip() for x in lines]
+            f.close()
+            if item not in lines:
+                f = open("fid-notif.dat", "a")
+                f.write(item+'\n')
+                f.close()
+                dc_str.append('https://warpcast.com/'+followers_with_scr[item][1])
+                print('SCR: %s, fid: %s , URL: %s'%(followers_with_scr[item][0], item, 'https://warpcast.com/'+followers_with_scr[item][1]))
+                cnt+=1
+                if cnt == lim:
+                    break
     send_direct_cast(fid, '\n'.join(dc_str))
     return True
 
