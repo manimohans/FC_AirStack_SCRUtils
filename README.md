@@ -37,9 +37,9 @@ This Python script utilizes the Airstack API to analyze Farcaster users' social 
 3. **Output:** 
    - The script will print up to 10 (default limit) followers with high SCR that the specified user doesn't follow back. 
    - Each line will display a list containing: SCR, FID, Warpcast URL (profileHandle that Airstack returns is confusing - need to test!)
-     - Example output:
-        SCR: 12, fid: 576, URL: https://warpcast.com/username 
-        SCR: 61, fid: 631, URL: https://warpcast.com/anotheruser
+     - Example output:  
+      SCR: 12, fid: 576, URL: https://warpcast.com/username  
+      SCR: 61, fid: 631, URL: https://warpcast.com/anotheruser
    
 
 ## Functions
