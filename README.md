@@ -7,6 +7,7 @@ This Python script utilizes the Airstack API to analyze Farcaster users' social 
 * **Get followers/following with SCR:** Retrieves a user's followers or following list, sorted by their Social Capital Rank.
 * **Identify unreciprocated followers:** Finds followers with high SCR who the user doesn't follow back.
 * **Paginated API calls:** Handles paginated responses from the Airstack API to retrieve all results.
+* **Programmable DC notification:** You can program it to send DC every N-number of days (or hours or months) - the same string.
 
 ## Prerequisites
 
